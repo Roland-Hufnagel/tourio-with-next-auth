@@ -8,8 +8,12 @@ export default async function handler(request, response) {
   const session = await getServerSession(request, response, authOptions);
 
   if (request.method === "GET") {
+    if (session){
     const places = await Place.find({ author: session.user.email });
-    return response.status(200).json(places);
+    return response.status(200).json(places);}else{
+      const places = await Place.find();
+      return response.status(200).json(places);
+    }
   } else if (request.method === "POST") {
     try {
       if (session) {
